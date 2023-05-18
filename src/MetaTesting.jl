@@ -71,17 +71,25 @@ If a test errors then it will display that error and throw an error of its own.
 
 # Examples
 
-```jldoctest
+```jldoctest; filter=[r"[0-9\\.]+s", r"Test\\.DefaultTestSet\\(.*\\)"]
 using MetaTesting, Test
 
 function test_equal(x, y)
     @test x == y
 end
 
-test_equal(1, 1)  # passes
-@test fails() do
-    test_equal(1, 2)
-end
+@testset "test_equal tests" begin
+    test_equal(1, 1)  # passes
+    @test fails() do
+        test_equal(1, 2)  # fails
+    end
+end;
+
+# output
+
+Test Summary:    | Pass  Total  Time
+test_equal tests |    2      2  0.0s
+Test.DefaultTestSet("test_equal tests", Any[], 2, false, false, true, 1.684442217674312e9, 1.684442217756266e9, false)
 ```
 """
 function fails(f)
@@ -112,17 +120,25 @@ If a test fails (rather than passing or erroring) then `errors` will throw an er
 
 # Examples
 
-```jldoctest
+```jldoctest; filter=[r"[0-9\\.]+s", r"Test\\.DefaultTestSet\\(.*\\)"]
 using MetaTesting, Test
 
 function test_approx(x, y)
     @test x ≈ y
 end
 
-test_approx(1.0, 2.0)  # passes
-@test errors() do
-    test_approx(1.0, (2.0,))  # fails, `isapprox(::Float64, ::Tuple{Float64})` is not defined
-end
+@testset "test_approx tests" begin
+    test_approx(1.0, 1.0)  # passes
+    @test errors() do
+        test_approx(1.0, (2.0,))  # errors, isapprox not defined for types
+    end
+end;
+
+# output
+
+Test Summary:     | Pass  Total  Time
+test_approx tests |    2      2  0.0s
+Test.DefaultTestSet("test_approx tests", Any[], 2, false, false, true, 1.684442215984607e9, 1.68444221725024e9, false)
 ```
 """
 function errors(f, msg_pattern="")
