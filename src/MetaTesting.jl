@@ -68,6 +68,21 @@ end
 `f` should be a function that takes no argument, and calls some code that used `@test`.
 `fails(f)` returns true if at least 1 `@test` fails.
 If a test errors then it will display that error and throw an error of its own.
+
+# Examples
+
+```jldoctest
+using MetaTesting, Test
+
+function test_equal(x, y)
+    @test x == y
+end
+
+test_equal(1, 1)  # passes
+@test fails() do
+    test_equal(1, 2)
+end
+```
 """
 function fails(f)
     results = nonpassing_results(f)
@@ -94,6 +109,21 @@ with a failure matching the given pattern.
 If nothing is passed then it default to the empty string, which matches any error message.
 
 If a test fails (rather than passing or erroring) then `errors` will throw an error.
+
+# Examples
+
+```jldoctest
+using MetaTesting, Test
+
+function test_approx(x, y)
+    @test x ≈ y
+end
+
+test_approx(1.0, 2.0)  # passes
+@test errors() do
+    test_approx(1.0, (2.0,))  # fails, `isapprox(::Float64, ::Tuple{Float64})` is not defined
+end
+```
 """
 function errors(f, msg_pattern="")
     results = nonpassing_results(f)
