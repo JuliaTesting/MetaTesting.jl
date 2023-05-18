@@ -11,3 +11,36 @@
 
 MetaTesting is a collection of utilities for testing "testers," functions that run tests.
 It is primarily intended as a test dependency.
+
+## Example
+
+First we define a tester:
+
+```julia
+using Test
+
+function test_approx(x, y)
+    @test x ≈ y
+end
+```
+
+Then we test it using MetaTesting:
+
+```julia
+using MetaTesting
+
+@testset begin
+    # test that tester correctly passes
+    test_approx(1.0, 1.0)
+
+    # test that tester correctly fails
+    @test fails() do
+        test_approx(1.0, 2.0)  # args not approximately equal
+    end
+
+    # test that tester correctly errors
+    @test errors() do
+        test_approx(1.0, (2.0,))  # isapprox not defined for this pair of types
+    end
+end
+```
