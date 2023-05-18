@@ -1,3 +1,9 @@
+module MetaTesting
+
+using Test
+
+export nonpassing_results, fails, errors
+
 """
     EncasedTestSet(desc, results) <: AbstractTestset
 
@@ -98,3 +104,5 @@ function errors(f, msg_pattern="")
     end
     return false  # no matching error occured
 end
+
+end  # module

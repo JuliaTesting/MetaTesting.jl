@@ -1,5 +1,8 @@
-@testset "meta_testing_tools.jl" begin
-    @testset "Checking for non-passes" begin
+using MetaTesting
+using Test
+
+@testset "MetaTesting.jl" begin
+    @testset "nonpassing_results" begin
         @testset "No Tests" begin
             fails = nonpassing_results(() -> nothing)
             @test length(fails) === 0
