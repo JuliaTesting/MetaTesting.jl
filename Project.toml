@@ -1,6 +1,6 @@
 name = "MetaTesting"
 uuid = "9e32d19f-1e4f-477a-8631-b16c78aa0f56"
-version = "0.1.0-DEV"
+version = "0.1.0"
 
 [deps]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
